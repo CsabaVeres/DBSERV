@@ -8,9 +8,9 @@ CREATE TABLE vasarlok (
 ) PARTITION BY LIST (varos);
 
 -- Vásárlók partíciók város alapján
-CREATE TABLE vasarlok_budapest PARTITION OF vasarlok FOR VALUES IN ('Budapest');
-CREATE TABLE vasarlok_debrecen PARTITION OF vasarlok FOR VALUES IN ('Debrecen');
-CREATE TABLE vasarlok_egyeb PARTITION OF vasarlok DEFAULT;
+-- CREATE TABLE vasarlok_budapest PARTITION OF vasarlok FOR VALUES IN ('Budapest');
+-- CREATE TABLE vasarlok_debrecen PARTITION OF vasarlok FOR VALUES IN ('Debrecen');
+-- CREATE TABLE vasarlok_egyeb PARTITION OF vasarlok DEFAULT;
 
 -- Könyvek tábla
 CREATE TABLE konyvek (
