@@ -66,7 +66,7 @@ FROM generate_series(1, 50000) i;
 -- Könyvek feltöltése (például 10 000 különböző könyv)
 INSERT INTO konyvek (cim, szerzo, ar, keszlet)
 SELECT
-    'Termek ' || i,
+    'Konyv ' || i,
     CASE WHEN i % 2 = 0 THEN 'Kaland' ELSE 'Krimi' END,
     RANDOM() * 100 + 50,
     (RANDOM() * 500)::INT
