@@ -52,3 +52,37 @@ CREATE TABLE szamlak (
     fizetett BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (rendeles_id) REFERENCES rendelesek (rendeles_id) ON DELETE CASCADE
 );
+
+-- Adatok feltöltése
+
+-- Vásárlók feltöltése (tömeges)
+INSERT INTO vasarlok (nev, email, cim, varos)
+SELECT
+    'Vasarlo ' || i,
+    CASE WHEN i % 3 = 0 THEN 'Budapest' WHEN i % 3 = 1 THEN 'Debrecen' ELSE 'Szeged' END,
+    NOW() - (INTERVAL '1 day' * (RANDOM() * 1000)::INT)
+FROM generate_series(1, 50000) i;
+
+-- Könyvek feltöltése (például 10 000 különböző könyv)
+INSERT INTO termekek (cim, szerzo, ar, keszlet)
+SELECT
+    'Termek ' || i,
+    CASE WHEN i % 2 = 0 THEN 'Kaland' ELSE 'Krimi' END,
+    RANDOM() * 100 + 50,
+    (RANDOM() * 500)::INT
+FROM generate_series(1, 10000) i;
+
+-- Rendelések feltöltése (tömeges)
+INSERT INTO rendelesek (vasarlo_id, Datum, statusz)
+SELECT (RANDOM() * 49999+1)::INT, NOW() - (INTERVAL '1 day' * (RANDOM() * 100)::INT)
+FROM generate_series(1, 100000);
+
+-- Rendelés tételek feltöltése
+INSERT INTO rendeles_tetelek (rendeles_id, konyv_id, mennyiseg, egysegar)
+SELECT (RANDOM() * 99999+1)::INT, (RANDOM() * 9999+1)::INT, (RANDOM() * 9999+1)::INT, (RANDOM() * 10 + 1)::INT
+FROM generate_series(1, 1000000);
+
+-- Számlák feltöltése (tömeges)
+INSERT INTO szamlak (rendeles_id, osszeg, fizetesi_mod)
+SELECT (RANDOM() * 99999+1)::INT, (RANDOM() * 9999+1)::INT
+FROM generate_series(1, 1000000);
