@@ -98,3 +98,7 @@ SELECT
     ROUND((RANDOM() * 9999 + 1)::NUMERIC, 2)
 FROM generate_series(1, 1000000);
 
+-- Teljesítmény optimalizálása
+
+CREATE INDEX idx_konyv_cim ON konyvek (cim);
+CREATE INDEX idx_rendeles_datum ON rendelesek (datum);
