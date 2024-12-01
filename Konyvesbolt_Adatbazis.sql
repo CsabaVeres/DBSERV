@@ -59,13 +59,13 @@ CREATE TABLE szamlak (
 -- Vásárlók feltöltése (tömeges)
 INSERT INTO vasarlok (nev, email, cim, varos)
 SELECT DISTINCT
-    'Vasarlo ' || i,
-    'Vasarlo' || i || '@example.com',
-    'Cím ' || i,
+    'Vasarlo ' || i AS nev,
+    'Vasarlo' || i || '@example.com' AS email,
+    'Cím ' || i AS cim,
     CASE WHEN i % 3 = 0 THEN 'Budapest'
          WHEN i % 3 = 1 THEN 'Debrecen'
          ELSE 'Szeged'
-    END
+    END AS varos
 FROM generate_series(1, 50000) i;
 
 -- Könyvek feltöltése (például 10 000 különböző könyv)
