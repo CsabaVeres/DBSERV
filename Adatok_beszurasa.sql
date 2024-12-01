@@ -4,6 +4,15 @@ INSERT INTO vasarlok (nev, email, cim, varos) VALUES
 ('Nagy Anna', 'anna.nagy@gmail.com', 'Debrecen, Kossuth utca 10.', 'Debrecen'),
 ('Tóth László', 'laszlo.toth@gmail.com', 'Szeged, Petőfi utca 5.', 'Szeged');
 
+-- Termékek feltöltése (például 10 000 különböző termék)
+INSERT INTO termekek (nev, email, cim, varos)
+SELECT
+    'Termek ' || i,
+    CASE WHEN i % 2 = 0 THEN 'Zöldség' ELSE 'Gyümölcs' END,
+    RANDOM() * 100 + 50,
+    (RANDOM() * 500)::INT
+FROM generate_series(1, 10000) i;
+
 -- Könyvek feltöltése
 INSERT INTO konyvek (cim, szerzo, ar, keszlet) VALUES
 ('A tenger szívében', 'Herman Melville', 3500.00, 50),
