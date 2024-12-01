@@ -5,7 +5,7 @@ INSERT INTO vasarlok (nev, email, cim, varos) VALUES
 ('Tóth László', 'laszlo.toth@gmail.com', 'Szeged, Petőfi utca 5.', 'Szeged');
 
 -- Vásárlók feltöltése (tömeges)
-INSERT INTO vasarlok (vasarlo_nev, varos, regisztracio_datum)
+INSERT INTO vasarlok (nev, email, cim, varos)
 SELECT
     'Vasarlo ' || i,
     CASE WHEN i % 3 = 0 THEN 'Budapest' WHEN i % 3 = 1 THEN 'Debrecen' ELSE 'Szeged' END,
@@ -19,7 +19,7 @@ INSERT INTO konyvek (cim, szerzo, ar, keszlet) VALUES
 ('A 451 fok Fahrenheit', 'Ray Bradbury', 2500.00, 20);
 
 -- Könyvek feltöltése (például 10 000 különböző könyv)
-INSERT INTO termekek (termek_nev, kategoria, ar, keszlet_mennyiseg)
+INSERT INTO termekek (cim, szerzo, ar, keszlet)
 SELECT
     'Termek ' || i,
     CASE WHEN i % 2 = 0 THEN 'Zöldség' ELSE 'Gyümölcs' END,
