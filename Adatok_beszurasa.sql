@@ -31,7 +31,7 @@ FROM generate_series(1, 10000) i;
 INSERT INTO rendelesek (vasarlo_id) VALUES (1), (2);
 
 -- Rendelések feltöltése (tömeges)
-INSERT INTO rendelesek (vasarlo_id, rendeles_datum)
+INSERT INTO rendelesek (vasarlo_id, Datum, status)
 SELECT (RANDOM() * 49999+1)::INT, NOW() - (INTERVAL '1 day' * (RANDOM() * 100)::INT)
 FROM generate_series(1, 100000);
 
