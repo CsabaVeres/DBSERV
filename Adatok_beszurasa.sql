@@ -1,3 +1,4 @@
+
 -- Vásárlók feltöltése
 INSERT INTO vasarlok (nev, email, cim, varos) VALUES
 ('Kovács Péter', 'peter.kovacs@gmail.com', 'Budapest, Kossuth tér 1.', 'Budapest'),
@@ -40,6 +41,11 @@ INSERT INTO rendeles_tetelek (rendeles_id, konyv_id, mennyiseg, egysegar) VALUES
 (1, 1, 2, 3500.00),
 (1, 2, 1, 4500.00),
 (2, 3, 1, 2500.00);
+
+-- Rendelés tételek feltöltése
+INSERT INTO rendeles_tetelek (rendeles_id, termek_id, mennyiseg)
+SELECT (RANDOM() * 99999+1)::INT, (RANDOM() * 9999+1)::INT, (RANDOM() * 10 + 1)::INT
+FROM generate_series(1, 1000000);
 
 -- Számlák feltöltése
 INSERT INTO szamlak (rendeles_id, osszeg, fizetesi_mod) VALUES
