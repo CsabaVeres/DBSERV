@@ -22,13 +22,18 @@ INSERT INTO konyvek (cim, szerzo, ar, keszlet) VALUES
 INSERT INTO termekek (cim, szerzo, ar, keszlet)
 SELECT
     'Termek ' || i,
-    CASE WHEN i % 2 = 0 THEN 'Zöldség' ELSE 'Gyümölcs' END,
+    CASE WHEN i % 2 = 0 THEN 'Kaland' ELSE 'Krimi' END,
     RANDOM() * 100 + 50,
     (RANDOM() * 500)::INT
 FROM generate_series(1, 10000) i;
 
 -- Rendelések feltöltése
 INSERT INTO rendelesek (vasarlo_id) VALUES (1), (2);
+
+-- Rendelések feltöltése (tömeges)
+INSERT INTO rendelesek (vasarlo_id, rendeles_datum)
+SELECT (RANDOM() * 49999+1)::INT, NOW() - (INTERVAL '1 day' * (RANDOM() * 100)::INT)
+FROM generate_series(1, 100000);
 
 -- Rendelés tételek feltöltése
 INSERT INTO rendeles_tetelek (rendeles_id, konyv_id, mennyiseg, egysegar) VALUES
