@@ -73,14 +73,14 @@ INSERT INTO konyvek (cim, szerzo, ar, keszlet)
 SELECT
     'Konyv ' || i,
     CASE WHEN i % 2 = 0 THEN 'Szerzo A' ELSE 'Szerzo B' END,
-    ROUND(RANDOM() * 100 + 50, 2),
+    ROUND((RANDOM() * 100 + 50)::NUMERIC, 2),
     (RANDOM() * 500)::INT
 FROM generate_series(1, 10000) i;
 
 -- Rendelések feltöltése (tömeges)
 INSERT INTO rendelesek (vasarlo_id, datum)
 SELECT
-    (RANDOM() * 49999 + 1)::INT, -- Létező vásárlók
+    (RANDOM() * 49999 + 1)::INT,
     NOW() - (INTERVAL '1 day' * (RANDOM() * 100)::INT)
 FROM generate_series(1, 100000);
 
@@ -90,13 +90,13 @@ SELECT
     (RANDOM() * 99999 + 1)::INT,
     (RANDOM() * 9999 + 1)::INT,
     (RANDOM() * 10 + 1)::INT,
-    ROUND(RANDOM() * 100 + 10, 2)
+    ROUND((RANDOM() * 100 + 10)::NUMERIC, 2)
 FROM generate_series(1, 1000000);
 
 -- Számlák feltöltése (tömeges)
 INSERT INTO szamlak (rendeles_id, osszeg)
 SELECT
-    rendeles_id,
-    SUM(mennyiseg * egysegar) AS osszeg
-FROM rendeles_tetelek
-GROUP BY rendeles_id;
+    (RANDOM() * 99999 + 1)::INT,
+    ROUND((RANDOM() * 9999 + 1)::NUMERIC, 2)
+FROM generate_series(1, 1000000);
+
