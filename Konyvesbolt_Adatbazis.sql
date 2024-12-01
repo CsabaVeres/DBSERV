@@ -64,7 +64,7 @@ SELECT
 FROM generate_series(1, 50000) i;
 
 -- Könyvek feltöltése (például 10 000 különböző könyv)
-INSERT INTO termekek (cim, szerzo, ar, keszlet)
+INSERT INTO konyvek (cim, szerzo, ar, keszlet)
 SELECT
     'Termek ' || i,
     CASE WHEN i % 2 = 0 THEN 'Kaland' ELSE 'Krimi' END,
