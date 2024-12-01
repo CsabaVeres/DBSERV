@@ -58,9 +58,9 @@ CREATE TABLE szamlak (
 
 -- Vásárlók feltöltése (tömeges)
 INSERT INTO vasarlok (nev, email, cim, varos)
-SELECT
+SELECT DISTINCT
     'Vasarlo ' || i,
-    'vasarlo' || i || '@example.com',
+    'Vasarlo' || i || '@example.com',
     'Cím ' || i,
     CASE WHEN i % 3 = 0 THEN 'Budapest'
          WHEN i % 3 = 1 THEN 'Debrecen'
