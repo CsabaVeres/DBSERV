@@ -4,20 +4,28 @@ INSERT INTO vasarlok (nev, email, cim, varos) VALUES
 ('Nagy Anna', 'anna.nagy@gmail.com', 'Debrecen, Kossuth utca 10.', 'Debrecen'),
 ('Tóth László', 'laszlo.toth@gmail.com', 'Szeged, Petőfi utca 5.', 'Szeged');
 
--- Termékek feltöltése (például 10 000 különböző termék)
-INSERT INTO termekek (nev, email, cim, varos)
+-- Vásárlók feltöltése (tömeges)
+INSERT INTO vasarlok (vasarlo_nev, varos, regisztracio_datum)
 SELECT
-    'Termek ' || i,
-    CASE WHEN i % 2 = 0 THEN 'Zöldség' ELSE 'Gyümölcs' END,
-    RANDOM() * 100 + 50,
-    (RANDOM() * 500)::INT
-FROM generate_series(1, 10000) i;
+    'Vasarlo ' || i,
+    CASE WHEN i % 3 = 0 THEN 'Budapest' WHEN i % 3 = 1 THEN 'Debrecen' ELSE 'Szeged' END,
+    NOW() - (INTERVAL '1 day' * (RANDOM() * 1000)::INT)
+FROM generate_series(1, 50000) i;
 
 -- Könyvek feltöltése
 INSERT INTO konyvek (cim, szerzo, ar, keszlet) VALUES
 ('A tenger szívében', 'Herman Melville', 3500.00, 50),
 ('A nagy Gatsby', 'F. Scott Fitzgerald', 4500.00, 30),
 ('A 451 fok Fahrenheit', 'Ray Bradbury', 2500.00, 20);
+
+-- Könyvek feltöltése (például 10 000 különböző könyv)
+INSERT INTO termekek (termek_nev, kategoria, ar, keszlet_mennyiseg)
+SELECT
+    'Termek ' || i,
+    CASE WHEN i % 2 = 0 THEN 'Zöldség' ELSE 'Gyümölcs' END,
+    RANDOM() * 100 + 50,
+    (RANDOM() * 500)::INT
+FROM generate_series(1, 10000) i;
 
 -- Rendelések feltöltése
 INSERT INTO rendelesek (vasarlo_id) VALUES (1), (2);
