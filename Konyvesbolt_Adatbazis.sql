@@ -1,16 +1,17 @@
 -- Vásárlók tábla (részletes particionálás nélkül)
 CREATE TABLE vasarlok (
-    vasarlo_id SERIAL PRIMARY KEY,
+    vasarlo_id SERIAL,
     nev VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
+    email VARCHAR(100) NOT NULL,
     cim VARCHAR(200),
-    varos VARCHAR(50)
+    varos VARCHAR(50) NOT NULL,
+    PRIMARY KEY (vasarlo_id, varos)
 ) PARTITION BY LIST (varos);
 
 -- Vásárlók partíciók város alapján
--- CREATE TABLE vasarlok_budapest PARTITION OF vasarlok FOR VALUES IN ('Budapest');
--- CREATE TABLE vasarlok_debrecen PARTITION OF vasarlok FOR VALUES IN ('Debrecen');
--- CREATE TABLE vasarlok_egyeb PARTITION OF vasarlok DEFAULT;
+CREATE TABLE vasarlok_budapest PARTITION OF vasarlok FOR VALUES IN ('Budapest');
+CREATE TABLE vasarlok_debrecen PARTITION OF vasarlok FOR VALUES IN ('Debrecen');
+CREATE TABLE vasarlok_egyeb PARTITION OF vasarlok DEFAULT;
 
 -- Könyvek tábla
 CREATE TABLE konyvek (
@@ -59,30 +60,43 @@ CREATE TABLE szamlak (
 INSERT INTO vasarlok (nev, email, cim, varos)
 SELECT
     'Vasarlo ' || i,
-    CASE WHEN i % 3 = 0 THEN 'Budapest' WHEN i % 3 = 1 THEN 'Debrecen' ELSE 'Szeged' END,
-    NOW() - (INTERVAL '1 day' * (RANDOM() * 1000)::INT)
+    'vasarlo' || i || '@example.com',
+    'Cím ' || i,
+    CASE WHEN i % 3 = 0 THEN 'Budapest'
+         WHEN i % 3 = 1 THEN 'Debrecen'
+         ELSE 'Szeged'
+    END
 FROM generate_series(1, 50000) i;
 
 -- Könyvek feltöltése (például 10 000 különböző könyv)
 INSERT INTO konyvek (cim, szerzo, ar, keszlet)
 SELECT
     'Konyv ' || i,
-    CASE WHEN i % 2 = 0 THEN 'Kaland' ELSE 'Krimi' END,
-    RANDOM() * 100 + 50,
+    CASE WHEN i % 2 = 0 THEN 'Szerzo A' ELSE 'Szerzo B' END,
+    ROUND(RANDOM() * 100 + 50, 2),
     (RANDOM() * 500)::INT
 FROM generate_series(1, 10000) i;
 
 -- Rendelések feltöltése (tömeges)
-INSERT INTO rendelesek (vasarlo_id, Datum, statusz)
-SELECT (RANDOM() * 49999+1)::INT, NOW() - (INTERVAL '1 day' * (RANDOM() * 100)::INT)
+INSERT INTO rendelesek (vasarlo_id, datum)
+SELECT
+    (RANDOM() * 49999 + 1)::INT, -- Létező vásárlók
+    NOW() - (INTERVAL '1 day' * (RANDOM() * 100)::INT)
 FROM generate_series(1, 100000);
 
 -- Rendelés tételek feltöltése
 INSERT INTO rendeles_tetelek (rendeles_id, konyv_id, mennyiseg, egysegar)
-SELECT (RANDOM() * 99999+1)::INT, (RANDOM() * 9999+1)::INT, (RANDOM() * 9999+1)::INT, (RANDOM() * 10 + 1)::INT
+SELECT
+    (RANDOM() * 99999 + 1)::INT,
+    (RANDOM() * 9999 + 1)::INT,
+    (RANDOM() * 10 + 1)::INT,
+    ROUND(RANDOM() * 100 + 10, 2)
 FROM generate_series(1, 1000000);
 
 -- Számlák feltöltése (tömeges)
-INSERT INTO szamlak (rendeles_id, osszeg, fizetesi_mod)
-SELECT (RANDOM() * 99999+1)::INT, (RANDOM() * 9999+1)::INT
-FROM generate_series(1, 1000000);
+INSERT INTO szamlak (rendeles_id, osszeg)
+SELECT
+    rendeles_id,
+    SUM(mennyiseg * egysegar) AS osszeg
+FROM rendeles_tetelek
+GROUP BY rendeles_id;
